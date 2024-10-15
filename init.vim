@@ -1,0 +1,9 @@
+set number
+set noswapfile
+set wrap
+set hlsearch
+set incsearch
+set smartcase
+set ruler
+set noerrorbells
+set novisualbell
