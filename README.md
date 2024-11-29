@@ -1,7 +1,7 @@
 # linux-configs
 this are my personal configs so use at own risk
 
-#sysctl.d
+# sysctl.d
 ```
 # Memory management settings
 vm.overcommit_memory=1
@@ -174,7 +174,7 @@ net.ipv4.tcp_max_syn_backlog=10240
 kernel.sched_schedstats=0
 ```
 
-#kernel parameters 
+# kernel parameters 
 ```
 kernel.split_lock_mitigate=0 split_lock_detect=off loglevel=0 udev.log_level=0 console=tty2 vt.global_cursor_default=0 cryptomgr.notests noaudit nowatchdog nosoftlockup audit=0 usbcore.autosuspend=-1 raid=noautodetect pci=pcie_bus_perf
 ```
