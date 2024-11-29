@@ -178,3 +178,39 @@ kernel.sched_schedstats=0
 ```
 kernel.split_lock_mitigate=0 split_lock_detect=off loglevel=0 udev.log_level=0 console=tty2 vt.global_cursor_default=0 cryptomgr.notests noaudit nowatchdog nosoftlockup audit=0 usbcore.autosuspend=-1 raid=noautodetect pci=pcie_bus_perf
 ```
+
+# dxvk.conf
+```
+# no fake device
+
+# sudo lspci -nn | grep VGA
+
+
+dxgi.customVendorId = 10de
+
+dxgi.customDeviceId = 2705
+
+d3d9.customVendorId = 10de
+
+d3d9.customDeviceId = 2705
+
+dxgi.customDeviceDesc = "GeForce RTX 4070 Ti SUPER"
+
+d3d9.customDeviceDesc = "GeForce RTX 4070 Ti SUPER"
+
+
+dxgi.nvapiHack = false
+
+dxgi.hideNvidiaGpu = False
+
+
+# latency stuff
+
+dxgi.syncInterval = 0
+
+d3d9.presentInterval = 0
+
+dxgi.maxFrameLatency = 1
+
+d3d9.maxFrameLatency = 1
+```
