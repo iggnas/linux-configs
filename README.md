@@ -16,11 +16,11 @@ vm.nr_overcommit_hugepages=0
 # Sets the number of Huge Pages that can be allocated.
 # 0 means no special allocation for Huge Pages.
 
-vm.swappiness=180
+vm.swappiness=100
 # Determines the tendency of the kernel to swap out memory pages.
 # Values range from 0 to 100: 0 means no swap and 100 means aggressive swapping.
 
-vm.vfs_cache_pressure=50
+vm.vfs_cache_pressure=25
 # Controls the tendency of the kernel to reclaim the memory used for caching of directory and inode objects.
 # Higher values increase the tendency to reclaim, while lower values decrease it.
 
