@@ -16,7 +16,7 @@ vm.nr_overcommit_hugepages=0
 # Sets the number of Huge Pages that can be allocated.
 # 0 means no special allocation for Huge Pages.
 
-vm.swappiness=100
+vm.swappiness=180
 # Determines the tendency of the kernel to swap out memory pages.
 # Values range from 0 to 100: 0 means no swap and 100 means aggressive swapping.
 
