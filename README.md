@@ -20,7 +20,7 @@ vm.swappiness=180
 # Determines the tendency of the kernel to swap out memory pages.
 # Values range from 0 to 100: 0 means no swap and 100 means aggressive swapping.
 
-vm.vfs_cache_pressure=25
+vm.vfs_cache_pressure=20
 # Controls the tendency of the kernel to reclaim the memory used for caching of directory and inode objects.
 # Higher values increase the tendency to reclaim, while lower values decrease it.
 
