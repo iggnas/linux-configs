@@ -164,6 +164,8 @@ net.ipv4.tcp_rfc1337=1
 net.ipv4.tcp_low_latency=1
 # Enables a low-latency mode for TCP connections, optimizing for latency-sensitive applications.
 
+net.ipv4.ip_forward=0
+
 net.ipv4.tcp_max_syn_backlog=10240
 # Increases the maximum number of half-open connections queued for acceptance, helpful during SYN flood attacks.
 
