@@ -23,14 +23,14 @@ vm.vfs_cache_pressure=1
 # Controls the tendency of the kernel to reclaim the memory used for caching of directory and inode objects.
 # Higher values increase the tendency to reclaim, while lower values decrease it.
 
-vm.dirty_bytes=4294967296
+# vm.dirty_bytes=4294967296
 # Sets the maximum amount of dirty memory (in bytes) allowed before the kernel starts writing it back to disk.
 
 vm.page-cluster=0
 # Specifies the number of pages that are read or written at a time during paging. 
 # A lower value means more frequent but smaller I/O operations.
 
-vm.dirty_background_bytes=2147483648
+# vm.dirty_background_bytes=2147483648
 # Sets the threshold for background writes. When the amount of dirty memory exceeds this value, the kernel starts writing it.
 
 vm.dirty_expire_centisecs=2500
