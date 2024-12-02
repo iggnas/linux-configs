@@ -19,14 +19,14 @@ vm.nr_overcommit_hugepages=0
 vm.swappiness=180
 # Determines the tendency of the kernel to swap out memory pages.
 
-vm.vfs_cache_pressure=20
+vm.vfs_cache_pressure=1
 # Controls the tendency of the kernel to reclaim the memory used for caching of directory and inode objects.
 # Higher values increase the tendency to reclaim, while lower values decrease it.
 
 vm.dirty_bytes=268435456
 # Sets the maximum amount of dirty memory (in bytes) allowed before the kernel starts writing it back to disk.
 
-vm.page-cluster=1
+vm.page-cluster=0
 # Specifies the number of pages that are read or written at a time during paging. 
 # A lower value means more frequent but smaller I/O operations.
 
@@ -163,8 +163,6 @@ net.ipv4.tcp_rfc1337=1
 
 net.ipv4.tcp_low_latency=1
 # Enables a low-latency mode for TCP connections, optimizing for latency-sensitive applications.
-
-net.ipv4.ip_forward=0
 
 net.ipv4.tcp_max_syn_backlog=10240
 # Increases the maximum number of half-open connections queued for acceptance, helpful during SYN flood attacks.
