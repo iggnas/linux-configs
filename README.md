@@ -18,26 +18,27 @@ vm.nr_overcommit_hugepages=0
 
 vm.swappiness=180
 # Determines the tendency of the kernel to swap out memory pages.
+# Values range from 0 to 100: 0 means no swap and 100 means aggressive swapping.
 
 vm.vfs_cache_pressure=1
 # Controls the tendency of the kernel to reclaim the memory used for caching of directory and inode objects.
 # Higher values increase the tendency to reclaim, while lower values decrease it.
 
-# vm.dirty_bytes=4294967296
+# vm.dirty_bytes=268435456
 # Sets the maximum amount of dirty memory (in bytes) allowed before the kernel starts writing it back to disk.
 
 vm.page-cluster=0
 # Specifies the number of pages that are read or written at a time during paging. 
 # A lower value means more frequent but smaller I/O operations.
 
-# vm.dirty_background_bytes=2147483648
+# vm.dirty_background_bytes=134217728
 # Sets the threshold for background writes. When the amount of dirty memory exceeds this value, the kernel starts writing it.
 
 vm.dirty_expire_centisecs=2500
 # Specifies the time in centiseconds (25 seconds) before old dirty pages are written to disk.
 
 vm.dirty_writeback_centisecs=1500
-# Sets the time in centiseconds (15 seconds) before a dirty page is written to the disk once it becomes dirty.
+# Sets the time in centiseconds (15 seconds) before a dirty page is written to the disk once it becomes dirty
 
 kernel.nmi_watchdog=0
 # Disables the non-maskable interrupt watchdog which can help detect hung processes but may add overhead.
@@ -143,7 +144,7 @@ net.core.somaxconn=8192
 net.ipv4.tcp_fastopen=3
 # Enables TCP Fast Open, allowing data to be sent during the TCP handshake; optimized for latency.
 
-net.ipv4.tcp_congestion_control=bbr
+net.ipv4.tcp_congestion_control=reno
 # Sets the TCP congestion control algorithm to BBR for optimized throughput and latency.
 
 net.ipv4.tcp_ecn=1
@@ -171,20 +172,19 @@ net.ipv4.tcp_max_syn_backlog=10240
 # Setting kernel.sched_schedstats to 0 turns off the gathering of scheduling-related statistics,
 # which can reduce overhead and improve performance in workloads where this data is not needed.
 kernel.sched_schedstats=0
+
+net.ipv6.conf.all.disable_ipv6=1
+net.ipv6.conf.default.disable_ipv6=1
+net.ipv4.conf.all.log_martians=0
 ```
 
 # kernel parameters 
 ```
-kernel.split_lock_mitigate=0 split_lock_detect=off loglevel=0 udev.log_level=0 console=tty2 vt.global_cursor_default=0 cryptomgr.notests noaudit nowatchdog nosoftlockup audit=0 usbcore.autosuspend=-1 raid=noautodetect pci=pcie_bus_perf
+intel_pstate=active kernel.split_lock_mitigate=0 lpj=11392000 split_lock_detect=off loglevel=0 udev.log_level=0 console=tty2 vt.global_cursor_default=0 cryptomgr.notests noaudit nowatchdog nosoftlockup audit=0 usbcore.autosuspend=-1 raid=noautodetect pci=pcie_bus_perf no_timer_check iomem=relaxed nohz_full
 ```
 
 # dxvk.conf
 ```
-# no fake device
-
-# sudo lspci -nn | grep VGA
-
-
 dxgi.customVendorId = 10de
 
 dxgi.customDeviceId = 2705
@@ -198,6 +198,9 @@ dxgi.customDeviceDesc = "GeForce RTX 4070 Ti SUPER"
 d3d9.customDeviceDesc = "GeForce RTX 4070 Ti SUPER"
 
 
+dxvk.deviceFilter = "NVIDIA"
+
+
 dxgi.nvapiHack = false
 
 dxgi.hideNvidiaGpu = False
@@ -208,8 +211,48 @@ dxgi.hideNvidiaGpu = False
 dxgi.syncInterval = 0
 
 d3d9.presentInterval = 0
+```
 
-dxgi.maxFrameLatency = 1
+# make.conf
+```
+# These settings were set by the catalyst build script that automatically
+# built this stage.
+# Please consult /usr/share/portage/config/make.conf.example for a more
+# detailed example.
+COMMON_FLAGS="-O3 -march=alderlake -mabm -mno-cldemote -mno-kl -mno-pconfig -mno-sgx -mno-widekl -mshstk --param=l1-cache-line-size=64 --param=l1-cache-size=48 --param=l2-cache-size=33792 -pipe -flto=auto -fgraphite-identity -floop-nest-optimize -fdevirtualize-at-ltrans -fipa-pta -fno-semantic-interposition"
+CFLAGS="${COMMON_FLAGS}"
+CXXFLAGS="${COMMON_FLAGS}"
+FCFLAGS="${COMMON_FLAGS}"
+FFLAGS="${COMMON_FLAGS}"
+MAKEOPTS="-j24 -l25"
 
-d3d9.maxFrameLatency = 1
+CGO_CFLAGS="${COMMON_FLAGS}"
+CGO_CXXFLAGS="${COMMON_FLAGS}"
+CGO_FFLAGS="${COMMON_FLAGS}"
+GCO_FCFLAGS="${COMMON_FLAGS}"
+CGO_LDFLAGS="${LDFLAGS}"
+
+RUSTFLAGS="-C target-cpu=native -C opt-level=3 -C strip=symbols"
+
+GOOS="linux"
+GOARCH="amd64"
+GOAMD64="v3"
+
+CPU_FLAGS_X96="aes avx avx2 f16c fma3 mmx mmxext pclmul popcnt rdrand sha sse sse2 sse3 sse4_1 sse4_2 ssse3 vpclmulqdq"
+
+USE="strip kernel-open pgo host-only graphite lto wifi iwd nvidia -wayland -kde -gnome -debug -bluetooth -cups -ipv6 -telemetry -systemd -audit -jack -test -doc -apparmor -dist-kernel -samba -scanner -secureboot -smartcard -xinerama -accessibility -examples -static-libs "
+ACCEPT_LICENSE="*"
+
+VIDEO_CARDS="nvidia"
+INPUT_DEVICES="libinput"
+# NOTE: This stage was built with the bindist USE flag enabled
+
+MICROCODE_SIGNATURES="-s 0x000b0671"
+
+# This sets the language of build output to English.
+# Please keep this setting intact when reporting bugs.
+LC_MESSAGES=C.utf8
+GENTOO_MIRRORS="http://tux.rainside.sk/gentoo/ \
+    ftp://tux.rainside.sk/gentoo/"
+GRUB_PLATFORMS="efi-64"
 ```
