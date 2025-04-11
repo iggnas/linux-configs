@@ -103,7 +103,7 @@ net.ipv4.conf.all.log_martians = 0       # Do not log martian packets
 
 # kernel parameters 
 ```
-intel_pstate=active kernel.split_lock_mitigate=0 lpj=11392000 split_lock_detect=off loglevel=0 udev.log_level=0 console=tty2 vt.global_cursor_default=0 cryptomgr.notests noaudit nowatchdog nosoftlockup audit=0 usbcore.autosuspend=-1 raid=noautodetect pci=pcie_bus_perf no_timer_check iomem=relaxed nohz_full
+intel_pstate=active kernel.split_lock_mitigate=0 lpj=11392000 split_lock_detect=off loglevel=0 udev.log_level=0 console=tty2 vt.global_cursor_default=0 cryptomgr.notests noaudit nowatchdog nosoftlockup audit=0 usbcore.autosuspend=-1 raid=noautodetect pci=pcie_bus_perf no_timer_check iomem=relaxed hpet=force nohz_full
 ```
 
 # dxvk.conf
