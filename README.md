@@ -56,6 +56,7 @@ vm.hugetlb_optimize_vmemmap = 0  # Disable huge page vmemmap optimization
 vm.hugetlb_shm_group = 0         # No special hugepage shared memory group
 vm.nr_hugepages_mempolicy = 0    # Default hugepage policy
 vm.unprivileged_userfaultfd = 1 # Allow unprivileged userfaultfd
+vm.workingset_protection = 1
 
 # FILESYSTEM
 fs.inotify.max_user_watches = 524288  # Increase max inotify watches
@@ -90,11 +91,8 @@ kernel.acpi_video_flags = 0      # No ACPI video flags
 net.core.somaxconn = 8192            # Increase pending connections queue
 net.ipv4.tcp_fastopen = 3            # Enable TCP Fast Open
 net.ipv4.tcp_congestion_control = bbr  # Use BBR congestion control
-net.ipv4.tcp_ecn = 1                 # Enable TCP ECN
 net.ipv4.tcp_timestamps = 0          # Disable TCP timestamps
 net.core.netdev_max_backlog = 4096   # Increase network device backlog
-net.ipv4.tcp_slow_start_after_idle = 0  # Disable slow start after idle
-net.ipv4.tcp_rfc1337 = 1             # Enable RFC 1337 handling
 net.ipv4.tcp_max_syn_backlog = 10240 # Increase SYN backlog
 net.ipv6.conf.all.disable_ipv6 = 1     # Disable IPv6 on all interfaces
 net.ipv6.conf.default.disable_ipv6 = 1  # Disable IPv6 by default for new interfaces
@@ -103,7 +101,7 @@ net.ipv4.conf.all.log_martians = 0       # Do not log martian packets
 
 # kernel parameters 
 ```
-intel_pstate=active kernel.split_lock_mitigate=0 lpj=11392000 split_lock_detect=off loglevel=0 udev.log_level=0 console=tty2 vt.global_cursor_default=0 cryptomgr.notests noaudit nowatchdog nosoftlockup audit=0 usbcore.autosuspend=-1 raid=noautodetect pci=pcie_bus_perf no_timer_check iomem=relaxed hpet=force nohz_full
+quiet splash intel_pstate=active kernel.split_lock_mitigate=0 split_lock_detect=off loglevel=0 udev.log_level=0 cryptomgr.notests noaudit nowatchdog nosoftlockup audit=0 usbcore.autosuspend=-1 pci=pcie_bus_perf no_timer_check iomem=relaxed hpet=force nohz_full
 ```
 
 # dxvk.conf
@@ -142,28 +140,32 @@ d3d9.presentInterval = 0
 # built this stage.
 # Please consult /usr/share/portage/config/make.conf.example for a more
 # detailed example.
-COMMON_FLAGS="-O3 -march=alderlake -mabm -mno-cldemote -mno-kl -mno-pconfig -mno-sgx -mno-widekl -mshstk --param=l1-cache-line-size=64 --param=l1-cache-size=48 --param=l2-cache-size=33792 -pipe -flto=auto -fgraphite-identity -floop-nest-optimize -fdevirtualize-at-ltrans -fipa-pta -fno-semantic-interposition"
+COMMON_FLAGS="-O3 -march=raptorlake -mabm -mno-cldemote -mno-kl -mno-pconfig -mno-sgx -mno-widekl -mshstk --param=l1-cache-line-size=64 --param=l1-cache-size=32 --param=l2-cache-size=33792 -pipe -flto=auto -fdevirtualize-at-ltrans -fipa-pta -fno-semantic-interposition -fomit-frame-pointer -fgraphite-identity -floop-nest-optimize -floop-parallelize-all -ftree-parallelize-loops=4"
+LDFLAGS="-Wl,-O2 -Wl,--as-needed"
 CFLAGS="${COMMON_FLAGS}"
 CXXFLAGS="${COMMON_FLAGS}"
 FCFLAGS="${COMMON_FLAGS}"
 FFLAGS="${COMMON_FLAGS}"
-MAKEOPTS="-j24 -l25"
+MAKEOPTS="-j14 -l28"
+EMERGE_DEFAULt_OPTS="--jobs 3 --load-average 28"
 
 CGO_CFLAGS="${COMMON_FLAGS}"
 CGO_CXXFLAGS="${COMMON_FLAGS}"
 CGO_FFLAGS="${COMMON_FLAGS}"
-GCO_FCFLAGS="${COMMON_FLAGS}"
+CGO_FCFLAGS="${COMMON_FLAGS}"
 CGO_LDFLAGS="${LDFLAGS}"
 
 RUSTFLAGS="-C target-cpu=native -C opt-level=3 -C strip=symbols"
+
+ABI_X86="64"
 
 GOOS="linux"
 GOARCH="amd64"
 GOAMD64="v3"
 
-CPU_FLAGS_X96="aes avx avx2 f16c fma3 mmx mmxext pclmul popcnt rdrand sha sse sse2 sse3 sse4_1 sse4_2 ssse3 vpclmulqdq"
+CPU_FLAGS_X86="aes avx avx2 f16c fma3 mmx mmxext pclmul popcnt rdrand sha sse sse2 sse3 sse4_1 sse4_2 ssse3 vpclmulqdq"
 
-USE="strip kernel-open pgo host-only graphite lto wifi iwd nvidia -wayland -kde -gnome -debug -bluetooth -cups -ipv6 -telemetry -systemd -audit -jack -test -doc -apparmor -dist-kernel -samba -scanner -secureboot -smartcard -xinerama -accessibility -examples -static-libs "
+USE="host-only multilib ithreads kernel-open lto nvidia openmp pgo strip threads graphite uefi64 vdpau wifi -accessibility -aalib -afs -apache2 -apparmor -aqua -atm -big-endian -bindist -bluetooth -branding -cdb -cgi -cjk -connman -coreaudio -cups -debug -dedicated -dist-kernel -djvu -doc -eds -emacs -emboss -examples -fastcgi -fbcon -firebird -freetds -ggi -gnome -gnuplot -gphoto2 -gps -graphviz -gsl -gsm -hddtemp -ibm -imap -infiniband -ios -ipod -ipv6 -jack -kde -lcms -maildir -mbox -mng -mtp -pcmcia -pop3 -ppds -qmail-spp -samba -scanner -secureboot -selinux -sdl -smartcard -smtp -speech -steamruntime -systemd -telemetry -test -wayland -xinerama -xwayland"
 ACCEPT_LICENSE="*"
 
 VIDEO_CARDS="nvidia"
@@ -175,7 +177,7 @@ MICROCODE_SIGNATURES="-s 0x000b0671"
 # This sets the language of build output to English.
 # Please keep this setting intact when reporting bugs.
 LC_MESSAGES=C.utf8
+GRUB_PLATFORMS="efi-64"
 GENTOO_MIRRORS="http://tux.rainside.sk/gentoo/ \
     ftp://tux.rainside.sk/gentoo/"
-GRUB_PLATFORMS="efi-64"
 ```
